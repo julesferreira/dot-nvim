@@ -1,0 +1,59 @@
+snippet putest "test with data provider"
+/**
+ * @dataProvider $1Provider
+ */
+public function test${1/\w+/\u$0/}($expected) {
+	$${2/\w+/\l$0/} = $this->getObjectWithMockedDependencies(
+		${2:CUT}::class,
+		[${3:
+			'${4:paramName}' => $${5:object},
+		}]
+	);
+
+	$0
+
+	$this->assertSame($expected, true, 'true');
+}
+
+public function $1Provider() {
+	return [
+		'' => [
+			true,
+		],
+	];
+}
+endsnippet
+
+snippet pumock "mock expects method with will"
+${1:$${2/\w+/\l$0/} = $this->createMock(${2:MOCK}::class);
+$${2/\w+/\l$0/}}${3:
+	->expects($this->${4:exactly}(${5:1}))}
+	->method('${6}')${7:
+	->with(\$this->equalTo(${8}))}${9:
+	->will(\$this->${10:returnValue}(${11}))};
+endsnippet
+
+
+
+# global !p
+# from helpers import php
+# endglobal
+
+# global !p
+# def complete(t, opts):
+#     if t:
+#         opts = [ m[len(t):] for m in opts if m.startswith(t) ]
+#     if len(opts) == 1:
+#         return opts[0]
+#     return "(" + "|".join(opts) + ")"
+# endglobal
+
+# snippet e "Mock proxy method" b
+# $this->$1`!p snip.rv=complete(t[1], ['any', 'never', 'once', 'exactly', 'at'])`
+# endsnippet
+
+# snippet expects "Mock proxy method" b
+# $${1:mock}->expects($this->$2`!p snip.rv=complete(t[2], ['any', 'never', 'once', 'exactly', 'at'])`($3))
+# 	->method('$4')
+# 	->will($this->$5`!p snip.rv=complete(t[5], ['returnValue', 'returnArgument', 'returnValueMap', 'returnCallback', 'onConsecutiveCalls'])`($6));
+# endsnippet
